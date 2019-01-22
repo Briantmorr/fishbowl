@@ -1,0 +1,25 @@
+{
+  "name": "fishbowl",
+  "version": "1.0.0",
+  "description": "fishbowl the game",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Briantmorr/fishbowl.git"
+  },
+  "author": "Briantmorr",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Briantmorr/fishbowl/issues"
+  },
+  "homepage": "https://github.com/Briantmorr/fishbowl#readme",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "mongoose": "^4.13.18"
+  }
+}
