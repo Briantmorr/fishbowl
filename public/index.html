@@ -11,9 +11,10 @@
 <body>
     <div class="container">
         <h1>Fishbowl</h1>
+        <div id="error"></div>
         <p>enter room code to join!</p>
-        <form action="joinRoom" method="get">
-            <input name="room_code" type="text">
+        <form onsubmit=validateRoom(event)>
+            <input name="room_code" id="room_code" type="text">
             <button id="submit">Submit</button>
         </form>
         <div class="button">

@@ -9,8 +9,12 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use('/', room);
+
 app.get('/', function(req, res) {
     res.sendFile('index.html');
+})
+app.get('/phrase', function(req, res) {
+    res.sendFile('phrase.html', {root: __dirname + '/public/'});
 })
 
 

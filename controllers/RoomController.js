@@ -23,18 +23,27 @@ exports.createRoom = function (req, res) {
 };
 
 
-exports.joinRoom= function (req, res) {
-    console.log(req);
-    Room.findOne({'room_code': req.body.room_code, status: 1}, 'id', function (err, result) {
-        if(err) throw err;
-        if(result) {
-            //call this again until we get a new result
-            res.send('room exists');
-        }
-        else {
-            res.send('room does not exist');
-        }
-    });
+exports.joinRoom= async function (req, res) {
+    console.log(req.query.room_code);
+    let result = await Room.findOne({'room_code': req.query.room_code, status: 1}, 'id')
+    if(result) {
+        console.log('result is here');
+        res.send(true)
+    }
+    else {
+        console.log('not there');
+        res.send('room does not exist');
+    }
+    //  function (err, result) {
+    //     if(err) throw err;
+    //     if(result) {
+    //         res.send(true)
+    //     }
+    //     else {
+    //         console.log('not there');
+    //         res.send({'body':'room does not exist'});
+    //     }
+    // });
 };
 
 
