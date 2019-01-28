@@ -1,17 +1,18 @@
 const Room = require('../models/Room');
 const db = require('../db');
 //Simple version, without validation or sanitation
-exports.code = function (req, res) {
-    res.send('Greetings from the Test controller!');
-};
 
-exports.createRoom = function (req, res) {
-    
+exports.createRoom = async function (req, res) {
+    // let response = await fetch('http://localhost:3000/createSettings');
+    // let settings_id = response.text();    
+    // console.log('s id', settings_id);
+
     let room_code = generateUniqueRoomCode();
     console.log('code', room_code);
     let newRoom = new Room(
         {
-            'room_code': room_code
+            'room_code': room_code,
+            // 'settings_id': settings_id
         }
     );
     newRoom.save(function(err) {

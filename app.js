@@ -13,8 +13,11 @@ app.use('/', room);
 app.get('/', function(req, res) {
     res.sendFile('index.html');
 })
-app.get('/phrase', function(req, res) {
+app.get('/phrase:id', function(req, res) {
     res.sendFile('phrase.html', {root: __dirname + '/public/'});
+})
+app.get('/chooseSettings', function(req, res) {
+    res.sendFile('settings.html', {root: __dirname + '/public/'});
 })
 
 
