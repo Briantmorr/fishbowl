@@ -5,17 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Fishbowl</title>
-    <!-- <script src="./src/settings.js"></script> -->
+    <link rel="stylesheet" type="text/css" media="screen" href="./css/style.css" />
+    <script src="./src/settings.js"></script>
 </head>
 <body>
-    <h1>Set your room settings</h1>
+    <div class="container">
 
-    <input name="rounds" type="text">
-    <input name="turn_time" type="text">
-    <input name="skips" type="text">
-    <input name="phrase_per_person" type="number">
-    <input name="max_phrase_words" type="text">
-    <button id='submit'>Submit</button>
+        <div id="main">
 
+            <h1>Set your room settings</h1>
+            <div id="room_code">
+                filler
+            </div>
+            <form id="postData">
+                <input name="rounds" type="text">
+                <input name="turn_time" type="text">
+                <input name="skips" type="text">
+                <input name="phrase_per_person" type="number">
+                <input name="max_phrase_words" type="text">
+            </form>
+            <button id='submit'>Create Room</button>
+        </div>
+        <div id="result" class="hidden">
+            <h1>Room created with code of: </h1>
+            <span></span>
+            <h3>please return to the home page to join the room!</h3>
+            <button id="home">Home</button>
+        </div>
+    </div> 
 </body>
 </html>

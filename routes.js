@@ -7,10 +7,10 @@ const phraseController = require('./controllers/PhraseController');
 const settingsController = require('./controllers/SettingsController');
 
 // a simple test url to check that all of our files are communicating correctly.
-router.get('/room', roomController.createRoom);
+router.get('/createRoomCode', roomController.createRoom);
 router.get('/joinRoom', roomController.joinRoom);
 // router.get('/createphrase', phraseController.phrase);
 router.get('/settings', settingsController.getSettings);
-router.get('/createSettings', settingsController.createSettings);
+router.post('/createSettings', settingsController.createSettings);
 // router.get('/chooseSettings', settingsController.chooseSettings);
 module.exports = router;

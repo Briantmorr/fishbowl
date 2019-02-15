@@ -16,7 +16,7 @@ app.get('/', function(req, res) {
 app.get('/phrase:id', function(req, res) {
     res.sendFile('phrase.html', {root: __dirname + '/public/'});
 })
-app.get('/chooseSettings', function(req, res) {
+app.get('/createRoom', function(req, res) {
     res.sendFile('settings.html', {root: __dirname + '/public/'});
 })
 

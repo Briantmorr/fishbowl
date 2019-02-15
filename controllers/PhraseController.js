@@ -1,9 +1,9 @@
 const Phrase = require('../models/Room');
 const db = require('../db');
 //Simple version, without validation or sanitation
-// exports.phrase = function (req, res) {
-//     res.sendfile('phrase.html');
-// };
+exports.phrase = function (req, res) {
+    res.sendfile('phrase.html');
+};
 
 exports.createRoom = function (req, res) {
     

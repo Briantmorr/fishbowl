@@ -11,7 +11,7 @@ function attachEventHandlers() {
 
 function handleClick() {
     console.log('click it');
-    window.location.href = window.location + 'room';
+    window.location.href = window.location + 'createRoom';
 }
 
 async function validateRoom(event) {
