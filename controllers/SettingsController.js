@@ -42,34 +42,23 @@ async function createSettings(req, res) {
     });
 };
 
+exports.createSettings = createSettings;
+
 async function associateSettingsToRoom(settings_id, room_code) {
     console.log('stuf', settings_id, room_code);
    return await Room.update({'room_code': room_code, 'status': 1}, {'settings_id' : settings_id}, {multi:false}).exec()
 }  
-exports.createSettings = createSettings;
 
 exports.getSettings = async function (req, res) {
-    console.log(req.query.room_code);
-
-    res.send('hello');
-    let result = await Settings.findOne({'room_code': req.query.room_code}, 'id');
-
-    console.log('results' ,result);
-    if(result) {
-        
-    }
-    // let settings= req.body;
-    // console.log('code', settings);
-    // // let newRoom = new Room(
-    // //     {
-    // //         'room_code': room_code
-    // //     }
-    // // );
-    // // newRoom.save(function(err) {
-    // // if(err) {
-    // //     return err;
-    // // }
-    //     res.send(req.body);
-    // // });
+    const room_code = req.query.room_code;
+    console.log('code is', room_code);
+    let result = await Room.findOne({'room_code': room_code}, 'settings_id').exec();
+    //handle room id somewhere else?
+    // room_id = result._id;
+    // settings.room_id = room_id;
+    console.log('settings:', result.settings_id);
+    let settings = await Settings.findOne({'_id': result.settings_id}).exec();
+    console.log('sett', settings);
+    res.send(settings);
 };
 

@@ -9,8 +9,11 @@ const settingsController = require('./controllers/SettingsController');
 // a simple test url to check that all of our files are communicating correctly.
 router.get('/createRoomCode', roomController.createRoom);
 router.get('/joinRoom', roomController.joinRoom);
-// router.get('/createphrase', phraseController.phrase);
 router.get('/settings', settingsController.getSettings);
 router.post('/createSettings', settingsController.createSettings);
 // router.get('/chooseSettings', settingsController.chooseSettings);
+
+router.get('/phrases', phraseController.getPhrases);
+router.post('/phrases', phraseController.addPhrases);
+
 module.exports = router;

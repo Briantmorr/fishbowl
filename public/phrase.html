@@ -5,20 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Fishbowl</title>
+
+    <link rel="stylesheet" type="text/css" media="screen" href="./css/style.css" />
     <script src="./src/phrase.js"></script>
 </head>
 <body>
-    <h1>Room Code: <span id="room_code"></span></h1>
+    <div class="container">
 
-    <p>Please enter 4 phrases</p>
-    <input id="phrase" type="text">
-    <button id='submit'>Submit</button>
-
-    <div id="list_container">
-
-        <ul id="phrase_list">
+        <h1>Room Code: <span id="room_code"></span></h1>
+        
+        <p>Please enter 4 phrases</p>
+        <input id="phrase" type="text">
+        <button id='submit'>Submit</button>
+        <button id="clearPhrases" class="hidden"> Reset Phrases </button>
+        <div id="list_container">
             
-        </ul>
+            <ul id="phrase_list">
+                
+            </ul>
+        </div>
     </div>
 </body>
 </html>

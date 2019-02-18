@@ -35,13 +35,13 @@ class Settings{
         try {
 
             let response = await fetch("http://localhost:3000/createSettings?room_code=" + this.room_code, {
-            method: 'POST',
-            body: JSON.stringify({"rounds": rounds, "turn_time": turn_time, "skips": skips, "phrases_per_person" : phrases_per_person, "max_phrase_length" : max_phrase_length}),
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        });
+                method: 'POST',
+                body: JSON.stringify({"rounds": rounds, "turn_time": turn_time, "skips": skips, "phrases_per_person" : phrases_per_person, "max_phrase_length" : max_phrase_length}),
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                }
+            });
 
 
                 response.text().then(function(response) {

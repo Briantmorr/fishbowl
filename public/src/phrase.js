@@ -6,10 +6,12 @@ class Phrase {
     constructor() {
         this.room_code = this.getParameterByName('room_code');
         this.displayRoomCode();
-        this.roomSettings = this.getRoomSettings();
+        this.getRoomSettings();
+        this.roomSettings; 
         console.log('cod is', this.room_code);
         this.phrases = [];
         this.attachEventHandlers();
+
     }
 
     addPhrase(phrase) {
@@ -21,25 +23,51 @@ class Phrase {
 
     checkPhraseCount() {
         console.log('phrasecount', this.phrases.length);
-        // if(this.phrases.length >= max_length) {
-            //submit and review
-        // }
-        // else {
-        //     // reset form and save
-        // }
+        console.log('se', this.roomSettings);
+        console.log('s', this.roomSettings.phrases_per_person);
+        let clearButton = document.getElementById('clearPhrases');
+        let submitButton = document.getElementById('submit');
+        let phraseInput = document.getElementById('phrase');
+        if(this.phrases.length >= this.roomSettings.phrases_per_person) {
+            // submit and review
+            clearButton.classList.toggle('hidden');
+            //change submit button
+            submitButton.innerText = "submit Phrases";
+            phraseInput.disabled = true;
+        }
+        else {
+            // reset form and save
+            clearButton.classList.add('hidden');
+            //change submit button
+            submitButton.innerText = "submit";
+            phraseInput.disabled = false;
+        }
     }
 
     attachEventHandlers() {
         let submitButton = document.getElementById('submit');
         submitButton.addEventListener('click', this.handleClick.bind(this));
        
-
+        let clearButton = document.getElementById('clearPhrases');
+        clearButton.addEventListener('click', ()  => {
+            // clear saved words and reset list;
+            this.phrases = [];
+            this.displayPhrases();
+            this.checkPhraseCount();
+        });
     }    
 
     handleClick(e) {
-        let phrase = document.getElementById('phrase').value;
-        console.log(phrase);
-        this.addPhrase(phrase);
+        let input = document.getElementById('phrase');
+        if(this.phrases.length < this.roomSettings.phrases_per_person) {
+            this.addPhrase(input.value);
+            // reset the input
+        }
+        else {
+            // last click is to submit.
+            this.submitPhrases();
+        }
+        input.value = '';
     }
 
     getParameterByName(name, url) {
@@ -55,11 +83,10 @@ class Phrase {
 
     async getRoomSettings() {
         let response = await fetch("http://localhost:3000/settings?room_code=" + this.room_code)
-        let body = await response.text();
-        console.log('body', body);
-        console.log(typeof(body));
-        console.log(response);
-        return response;
+        let result = await response.json();
+        console.log('result settings', result);
+        result.phrases_per_person = 1;
+        this.roomSettings = result;
     }
     
     displayRoomCode() {
@@ -81,7 +108,20 @@ class Phrase {
         });
     }
 
-    submitPhrases() {
+    async submitPhrases() {
+        console.log('sumittinggg');
+
+        let response = await fetch("http://localhost:3000/phrases?room_code=" + this.room_code, {
+
+        method: 'POST',
+        body: JSON.stringify({'phrases': this.phrases}),
+        headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            }
+        });
+        console.log('respy', response);
+        // after submitting successfully, redirect to home? or game lobby. Start with all going to play, then lock it to host phone.
 
     }
 } 
