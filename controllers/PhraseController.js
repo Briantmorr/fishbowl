@@ -8,17 +8,11 @@ exports.phrase = function (req, res) {
 
 exports.getPhrases = async function (req, res) {
     //use room id/code to get associated phrases    
-    
-    let room_code = req.query.room_code;
-    let result = await Room.findOne({'room_code': room_code}).exec(); 
-    console.log('result i', result);
-    console.log(result.phrase_id);
-    if(result.phrase_id) {
+    const room_code = req.query.room_code;
+    let phrase = await getAllPhrases(room_code);
+    console.log('phrases are', phrase);       
 
-    }
-    else {
-        res.send(null);
-    }
+        res.send(phrase);
 };
 
 exports.addPhrases = async function (req, res) {
@@ -26,11 +20,19 @@ exports.addPhrases = async function (req, res) {
     const room_code = req.query.room_code;
     const phrases = req.body.phrases;
     console.log('phrases are', phrases);
-    console.log('in hr');
     let phrase = await getAllPhrases(room_code);
     if(phrase) {
         console.log('phrases exist');
         // add our phrases to existing and save
+        let existingPhrases = phrase.phrases;
+        console.log('exis', existingPhrases);
+        let totalPhrases = existingPhrases.concat(phrases);
+        console.log('total', totalPhrases);
+
+        let phraseModel = await Phrase.findOneAndUpdate({'_id': phrase._id}, {$set:{'phrases': totalPhrases}}).exec();
+        console.log('new phraess model', phraseModel);
+        res.sendStatus(200);
+        //doesn't return newest model, with updated phrases, but it works.
     } 
     else{
         console.log('phrases dont exist');
@@ -39,27 +41,16 @@ exports.addPhrases = async function (req, res) {
             'phrases' : phrases
         });
 
-        newPhrase.save(function(err, result) {
-            if(err) {
-                return err;
-            }
-            //possibly callback? doesn't like async here
-
-            
-                // console.log('rsult', result);
-                // now associate this with the room.
-                let newRoom = await Room.findOne({'room_code': room_code}).exec();
-                newRoom.phrases_id = result._id;
-                newRoom.save(function(err, roomResult) {
-                    if(err) {
-                        return err;
-                    }
-                    
-                    console.log('ro and r', roomResult); 
-                })
-            });
+        phrasePromise = newPhrase.save();
+        
+        phrasePromise.then(function (response) {
+            //  now associate this with the room.
+            return newRoom = Room.findOneAndUpdate({'room_code': room_code}, {$set:{'phrases_id': response._id}}); //.exec();
+        }).then(function (response) {
+            console.log('SUCCESS: updated room wht phrase id', response); 
+        });
     }
-    // first get Phrases
+    // // first get Phrases
 
 
     // if no phrase, we will create a new phrase object and associate with our room
@@ -68,10 +59,12 @@ exports.addPhrases = async function (req, res) {
 // helper get phrases
 async function getAllPhrases(room_code) {
     let result = await Room.findOne({'room_code': room_code}).exec(); 
-    console.log('result i', result);
-    console.log(result.phrase_id);
-    if(result.phrase_id) {
+    console.log(result.phrases_id);
+    if(result.phrases_id) {
         // use phrase id to get phrases from model.
+        let phrase = await Phrase.findOne({'_id': result.phrases_id}).exec();
+        console.log('prase' , phrase);
+        return phrase;
     }
     else {
         return null;

@@ -11,18 +11,23 @@
 </head>
 <body>
     <div class="container">
-
         <h1>Room Code: <span id="room_code"></span></h1>
-        
-        <p>Please enter 4 phrases</p>
-        <input id="phrase" type="text">
-        <button id='submit'>Submit</button>
-        <button id="clearPhrases" class="hidden"> Reset Phrases </button>
-        <div id="list_container">
-            
-            <ul id="phrase_list">
+
+        <div id="phraseContainer">
+            <p>Please enter 4 phrases</p>
+            <input id="phrase" type="text">
+            <button id='submit'>Submit</button>
+            <button id="clearPhrases" class="hidden"> Reset Phrases </button>
+            <div id="list_container">
                 
-            </ul>
+                <ul id="phrase_list">
+                    
+                </ul>
+            </div>
+        </div>
+        <div id="launchContainer" class ="hidden">
+            <h1>Launch Game?</h1>
+            <button id="startButton">Start Game</button>
         </div>
     </div>
 </body>

@@ -45,8 +45,6 @@ class Settings{
 
 
                 response.text().then(function(response) {
-                    console.log('posted correctly with setting id of: ', response);
-                    console.log(this);
                     this.handleSettingsResponse(response);
             }.bind(this));
         }

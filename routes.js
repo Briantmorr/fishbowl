@@ -16,4 +16,6 @@ router.post('/createSettings', settingsController.createSettings);
 router.get('/phrases', phraseController.getPhrases);
 router.post('/phrases', phraseController.addPhrases);
 
+// router.get('/game', gameController.game);
+
 module.exports = router;

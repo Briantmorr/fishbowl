@@ -14,3 +14,19 @@ body {
 visibility: hidden;
 display: none;
 }
+
+.phraseContainer {
+    background-color: white;
+    border: solid black 5px;
+    border-radius: 5%;
+    min-width:50vw;
+    min-height:10vh;
+}
+
+#start {
+    min-width:8vw;
+    min-height:5vh;
+}
+#start :hover{
+    border: solid black 3px;
+}

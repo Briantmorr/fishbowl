@@ -20,6 +20,10 @@ app.get('/createRoom', function(req, res) {
     res.sendFile('settings.html', {root: __dirname + '/public/'});
 })
 
+app.get('/game', function(req, res) {
+    res.sendFile('game.html', {root: __dirname + '/public/'});
+})
+
 
 let port = 3000;
 

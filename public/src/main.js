@@ -33,7 +33,6 @@ async function validateRoom(event) {
         console.log('enter room');
         // redirect to room
         window.location.pathname += 'phrase?room_code=' + room_code;
-        // ?room=' + room_code;
     }
     else {
         displayErrors(body);

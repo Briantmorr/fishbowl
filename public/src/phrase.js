@@ -55,6 +55,12 @@ class Phrase {
             this.displayPhrases();
             this.checkPhraseCount();
         });
+
+        let startButton = document.getElementById('startButton');
+        startButton.addEventListener('click', () => {
+            window.location.replace('http://localhost:3000/game?room_code=' +  this.room_code);
+
+        })
     }    
 
     handleClick(e) {
@@ -109,10 +115,8 @@ class Phrase {
     }
 
     async submitPhrases() {
-        console.log('sumittinggg');
 
         let response = await fetch("http://localhost:3000/phrases?room_code=" + this.room_code, {
-
         method: 'POST',
         body: JSON.stringify({'phrases': this.phrases}),
         headers: {
@@ -120,8 +124,24 @@ class Phrase {
                 'Content-Type': 'application/json'
             }
         });
-        console.log('respy', response);
+        response.text().then((response, err) => {
+            if(response === 'OK') {
+                // move forward to next screen
+                // let them Play
+                this.handleGameStart();
+            }
+            // handle error
+        })
         // after submitting successfully, redirect to home? or game lobby. Start with all going to play, then lock it to host phone.
 
+    }
+
+    handleGameStart() {
+
+        const launchContainer = document.getElementById('launchContainer');
+        const phraseContainer = document.getElementById('phraseContainer');
+        
+        phraseContainer.classList.toggle('hidden');
+        launchContainer.classList.toggle('hidden');
     }
 } 

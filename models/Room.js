@@ -6,9 +6,9 @@ const FINISHED = 3;
 
 let RoomSchema = new Schema({
     room_code: {type: String, required: true, max: 10},
-    settings_id: {type: String, required: false, default: 1},
-    phrases_id: {type: Number, required: false},
-    status: {type: Number, required: true, max: 10, default:1}
+    settings_id: {type: String, required: false, default: null},
+    phrases_id: {type: String, required: false, default: null},
+    status: {type: Number, required: true, max: 10, default: 1}
 });
 
 
