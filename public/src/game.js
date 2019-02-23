@@ -1,5 +1,7 @@
 let team1;
 let team2; 
+// break out team and others into seperate files
+
 document.addEventListener("DOMContentLoaded", function () {
     //set first team to active and pass into game
     team1 = new Team('team1', true);
@@ -16,38 +18,31 @@ class Game{
 
         this.roomSettings; 
         this.phrases = [];
+        this.randomPhrases = [];
+        this.skips;
+        this.timer;
+        this.timeRemaining;
         this.attachEventHandlers();
 
         this.activeTeam = activeTeam;
         this.inactiveTeam = inactiveTeam;
-    }
-
-    checkPhraseCount() {
-        console.log('phrasecount', this.phrases.length);
-        console.log('se', this.roomSettings);
-        console.log('s', this.roomSettings.phrases_per_person);
-        let clearButton = document.getElementById('clearPhrases');
-        let submitButton = document.getElementById('submit');
-        let phraseInput = document.getElementById('phrase');
-        if(this.phrases.length >= this.roomSettings.phrases_per_person) {
-            // submit and review
-            clearButton.classList.toggle('hidden');
-            //change submit button
-            submitButton.innerText = "submit Phrases";
-            phraseInput.disabled = true;
-        }
-        else {
-            // reset form and save
-            clearButton.classList.add('hidden');
-            //change submit button
-            submitButton.innerText = "submit";
-            phraseInput.disabled = false;
-        }
+        this.displayActiveTeam();
     }
 
     attachEventHandlers() {
         let startButton = document.getElementById('start');
-        startButton.addEventListener('click', this.handleStart.bind(this));
+        startButton.addEventListener('click', () => {
+            console.log('click;');
+            console.log(startButton.innerText);
+            if(startButton.innerText == "Start") {
+                this.handleStart();
+                startButton.innerText = "Pause";
+            }
+            else {
+                this.handlePause();
+                startButton.innerText = "Start";
+            }
+        });
        
         let nextButton = document.getElementById('next');
         nextButton.addEventListener('click', ()  => {
@@ -59,6 +54,11 @@ class Game{
             this.displayNextPhrase(true);
         })
     }    
+    handlePause() {
+        console.log("HAPEEUSING");
+        clearInterval(this.timer);
+    }
+    
     toggleActiveTeam() {
         //toggle team active and update our local variables 
         let tempTeam = this.activeTeam;
@@ -68,12 +68,22 @@ class Game{
 
         this.activeTeam = this.inactiveTeam;
         this.inactiveTeam = tempTeam;
+        this.displayActiveTeam();
     }
 
-    handleStart(e) {
-        this.randomPhrases = this.randomizePhraseArray(this.phrases);
-        this.startTimer(this.roomSettings.turn_time);
-        this.displayNextPhrase();
+    displayActiveTeam() {
+        let teamSpan = document.getElementById('teamSpan');
+        teamSpan.innerText = this.activeTeam.name;
+    }
+
+    handleStart() {
+        this.timer = this.startTimer();
+        // show phrase if this is our first time;
+        if(this.phrases.length == this.randomPhrases.length) {
+            this.randomPhrases = this.randomizePhraseArray(this.phrases);
+            console.log("new phrase");
+            this.displayNextPhrase();
+        }
 
     }
     setTimer(time) {
@@ -82,26 +92,37 @@ class Game{
         timerSpan.innerText = time;
 
     }
-    startTimer(turn_time) {
-        console.log('settings are', turn_time);
+    startTimer() {
+        // turn_time = 10;
         let timerSpan = document.getElementById('timer');
-        timerSpan.innerText = turn_time;
+        timerSpan.innerText = this.timeRemaining;
         // convert seconds to milliseconds;
         let timer = setInterval(() => {
-            console.log(turn_time);
-            if(turn_time <= 0) {
+            if(this.timeRemaining <= 1) {
                 clearInterval(timer);
+                this.setTimer(0);
                 this.finishTurn();
             } else {
-                turn_time -= 1; 
-                this.setTimer(turn_time);
+                this.timeRemaining -= 1; 
+                this.setTimer(this.timeRemaining);
+                
             }
         }, 1000);
-
+        return timer;
     }
     finishTurn() {
         //finish turn when timer is done 
-        
+        this.recyclePhrase(this.phrases[0]);
+        //reset timer
+        this.setTimer(this.roomSettings.turn_time);
+        // reorder Bowl
+        this.randomizePhraseArray();
+        let activePhraseSpan = document.getElementById('activePhrase');
+        activePhraseSpan.innerText = '';
+        console.log('all phrases', this.phrases);
+        // reset start button 
+        //clear prompt by inserting it back into bowl
+
         // switch Teams;
         this.toggleActiveTeam();
     }
@@ -131,17 +152,14 @@ class Game{
 
         if(skip) {
             // after skipping insert into random location
-            let insertionPoint = Math.floor(Math.random(this.randomPhrases.length) * this.randomPhrases.length);
-            console.log('rendom', Math.random(this.randomPhrases.length) * this.randomPhrases.length);
-            console.log('nu', insertionPoint);
-            this.randomPhrases.splice(insertionPoint, 0, activePhrase);
+            this.recyclePhrase(activePhrase);
+            this.handleSkipUsage();
         } else {
             this.activeTeam.incrementRoundScore();
         }
 
         if(this.randomPhrases.length > 0) {
             activePhraseSpan.innerText = this.randomPhrases[0];
-            this.showStats();
         }
         else {
             // handle end of round
@@ -149,8 +167,15 @@ class Game{
             // this.toggleActiveTeam();
             this.finishRound();
         }
-
+        
+        this.updateStats();
         console.log(this.randomPhrases);
+    }
+    recyclePhrase(activePhrase) {
+            let insertionPoint = Math.floor(Math.random(this.randomPhrases.length) * this.randomPhrases.length);
+            console.log('rendom', Math.random(this.randomPhrases.length) * this.randomPhrases.length);
+            console.log('nu', insertionPoint);
+            this.randomPhrases.splice(insertionPoint, 0, activePhrase);
     }
     showStats() {
         //display points scored this turn
@@ -178,7 +203,10 @@ class Game{
         console.log('result settings', result);
         // result.phrases_per_person = 1;
         this.roomSettings = result;
-        this.setTimer(this.roomSettings.turn_time);
+        this.skips = result.skips;
+        this.timeRemaining = result.turn_time;
+        this.setTimer(this.timeRemaining);
+        this.updateStats();
     }
     
     async getRoomPhrases() {
@@ -186,6 +214,8 @@ class Game{
         let result = await response.json();
         console.log('result phrases', result);
         this.phrases = result.phrases;
+
+        this.updateStats();
     }
     
     displayRoomCode() {
@@ -207,26 +237,13 @@ class Game{
         });
     }
 
-    async submitPhrases() {
-
-        let response = await fetch("http://localhost:3000/phrases?room_code=" + this.room_code, {
-        method: 'POST',
-        body: JSON.stringify({'phrases': this.phrases}),
-        headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        });
-        response.text().then((response, err) => {
-            if(response === 'OK') {
-                // move forward to next screen
-                // let them Play
-                this.handleGameStart();
-            }
-            // handle error
-        })
-        // after submitting successfully, redirect to home? or game lobby. Start with all going to play, then lock it to host phone.
-
+    handleSkipUsage() {
+        this.skips--;
+        // if skips 0 disalbe button
+        if(this.skips <= 0) {
+            let skipButton = document.getElementById('skip');
+            skipButton.disabled = true;
+        }
     }
 
     handleGameStart() {
@@ -242,6 +259,14 @@ class Game{
     }
     resetGame() {
         
+    }
+
+    updateStats() {
+        let wordsRemaining = document.getElementById('wordsRemaining');
+        wordsRemaining.innerText = this.phrases.length;
+
+        let skipsRemaining = document.getElementById('skipsRemaining');
+        skipsRemaining.innerText = this.skips ? this.skips : 0;
     }
 }
 
@@ -280,4 +305,5 @@ class Team {
     getActive() {
         return this.active;
     }
+
 }

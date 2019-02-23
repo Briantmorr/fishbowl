@@ -30,3 +30,13 @@ display: none;
 #start :hover{
     border: solid black 3px;
 }
+
+.statsContainer {
+    border: ridge black 5px;
+    background-color:lightslategray;
+    width: 50%;
+    text-align:center;
+    
+    margin:auto;
+    margin-top: 10vh;
+}

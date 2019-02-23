@@ -11,16 +11,25 @@
 </head>
 <body>
     <div class="container">
-        <h1>lets play a game</h1>
-
+        <h1>Fishbowl</h1>
+        <span id="teamSpan"></span>
         <h2>Phrase to guess</h2>
         <div id="timerContainer"><span id="timer"></span></div>
         <div class="phraseContainer">
             <span id="activePhrase"></span>
         </div>
-        <button class="round" id="start">Start!</button>
+        <button class="round" id="start">Start</button>
         <button class="round" id="next">Next</button>
         <button class="round" id="skip">Skip</button>
+
+        <div class="statsContainer">
+            <p>Words remaining in the bowl: <span id="wordsRemaining"></span></p>
+            <p>Score this turn: <span id="activeScore">0</span></p>
+            <p>Skips remaining: <span id="skipsRemaining"></span></p>
+            <!-- bold the active team -->
+            <p>Team 1 round score: <span id="team1Round">0</span></p>
+            <p>Team 2 round score: <span id="team2Round">0</span></p>
+        </div>
     </div>
 </body>
 </html>
